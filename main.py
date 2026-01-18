@@ -29,15 +29,24 @@ if __name__ == "__main__":
         
     ts= load.timescale()
     t=ts.now()
-    
+    print("List of trackable satellites ")
+
     for i in range (0, len(satellites)):
         print(f'{i} -> {satellites[i]}')
-
-        geocentric=satellites[i].at(t) #where is it at time t, wrt earth's centre
+    
+    choice = int(input("\n Select a satellite by index"))
+    if choice < 0 or choice >= len(satellites):
+        print("Invalid satellite index.")
+        exit()
+    else:
+        geocentric=satellites[choice].at(t) #where is it at time t, wrt earth's centre
         subpoint = wgs84.subpoint(geocentric) # subpoint is a line drawn so that we get The point on Earth directly underneath the satellite
         #wgs84 is a mathematical model of the earth, its a standard global reference system
 
         print(f"    Latitude: {subpoint.latitude.degrees:.4f}°")
         print(f"    Longitude: {subpoint.longitude.degrees:.4f}°")
         print(f"    Altitude: {subpoint.elevation.km:.2f} km\n")
+ 
 
+
+        
