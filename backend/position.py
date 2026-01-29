@@ -1,4 +1,4 @@
-from skyfield.api import load, wgs84
+from skyfield.api import *
 
 
 def get_satellite_state(satellite):
@@ -8,7 +8,7 @@ def get_satellite_state(satellite):
     Returns: dict with lat, lon, altitude, velocity, name, norad_id
     """
     ts = load.timescale()
-    t = ts.now()
+    t = ts.now() #create a time object for NOW, yes like rn
     
     geocentric = satellite.at(t)  # where is it at time t, wrt earth's centre
     subpoint = wgs84.subpoint(geocentric)  # subpoint is a line drawn so that we get The point on Earth directly underneath the satellite
@@ -22,14 +22,13 @@ def get_satellite_state(satellite):
         "latitude": subpoint.latitude.degrees,
         "longitude": subpoint.longitude.degrees,
         "altitude": subpoint.elevation.km,
-        "velocity": (velocity[0]**2 + velocity[1]**2 + velocity[2]**2) ** 0.5
+        "velocity": (velocity[0]**2 + velocity[1]**2 + velocity[2]**2) ** 0.5 #speed in scalar
     }
 
 
 def get_observer_view(satellite, observer_lat, observer_lon):
     """
-    Get satellite position relative to an observer.
-    
+    Get satellite position relative to an observer.(anywhere with cords)
     Returns: dict with altitude, azimuth, distance
     """
     ts = load.timescale()
@@ -54,7 +53,6 @@ def get_observer_view(satellite, observer_lat, observer_lon):
 def generate_ground_track(satellite, minutes_ahead=90, step_seconds=30):
     """
     Generate ground track for satellite over time period.
-    
     Returns: list of (lat, lon) tuples
     """
     ts = load.timescale()
